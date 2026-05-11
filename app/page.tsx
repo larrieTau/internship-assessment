@@ -199,11 +199,28 @@ export default function Home() {
         <div className="hero-copy">
           <p className="eyebrow">Sunbird AI studio</p>
           <h1>Turn content into speech.</h1>
-          <p className="lede">A refined workspace for translation, transcription, and voice.</p>
+          <p className="lede">
+            A polished studio for translating, summarizing, and speaking content with elegant focus.
+          </p>
           <div className="hero-badges">
             <span>Text</span>
             <span>Audio</span>
             <span>Classic orange</span>
+          </div>
+
+          <div className="hero-stats" aria-label="Product highlights">
+            <div>
+              <strong>5</strong>
+              <span>Ugandan languages</span>
+            </div>
+            <div>
+              <strong>Real</strong>
+              <span>Live Sunbird output</span>
+            </div>
+            <div>
+              <strong>Fast</strong>
+              <span>Text and audio flow</span>
+            </div>
           </div>
         </div>
 
