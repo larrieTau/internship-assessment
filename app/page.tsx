@@ -196,8 +196,9 @@ export default function Home() {
   return (
     <main className="page-shell">
       <section className="hero-card">
-        <div className="hero-copy">
-          <p className="eyebrow">Sunbird AI studio</p>
+        <div className="hero-copy">          <div className="hero-logo-container">
+            <img src="/logo.png" alt="Sunbird AI" className="hero-logo" />
+          </div>          <p className="eyebrow">Sunbird AI studio</p>
           <h1>Turn content into speech.</h1>
           <p className="lede">
             A polished studio for translating, summarizing, and speaking content with elegant focus.
