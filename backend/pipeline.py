@@ -9,8 +9,8 @@ from backend.sunbird_client import SunbirdClient
 
 
 LANGUAGE_MAPPING = {
-    "Luganda": "lg",
-    "Runyankole": "ny",
+    "Luganda": "lug",
+    "Runyankole": "nyn",
     "Ateso": "teo",
     "Lugbara": "lgg",
     "Acholi": "ach",

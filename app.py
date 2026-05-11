@@ -145,95 +145,118 @@ def process_input(
 
 def create_interface():
     """Create and return the Gradio interface."""
-    
-    with gr.Blocks(title="Sunbird AI GenAI App") as app:
-        
-        gr.Markdown("""
-        # 🌻 Sunbird AI GenAI Application
-        
-        Transform text and audio through AI-powered summarization, translation, and speech synthesis.
-        
-        **Pipeline:** Input → (Transcribe if audio) → Summarize → Translate → Synthesize Speech
-        """)
-        
-        with gr.Group():
-            input_type = gr.Radio(
-                choices=["text", "audio"],
-                value="text",
-                label="Input Type"
-            )
-            
-            target_language = gr.Dropdown(
-                choices=list(LANGUAGE_MAPPING.keys()),
-                value="Luganda",
-                label="Target Language"
-            )
-        
-        # Conditional inputs based on input_type
-        with gr.Group():
-            text_input = gr.Textbox(
-                label="Text Input",
-                placeholder="Enter or paste text here...",
-                lines=5,
-                visible=True
-            )
-            
-            audio_input = gr.Audio(
-                label="Audio Input",
-                type="numpy",
-                visible=False
-            )
-        
+    with gr.Blocks(title="Sunbird AI GenAI App", elem_classes=["app-shell"]) as app:
+        gr.Markdown(
+            """
+            <div class="hero">
+              <div class="hero-badge">Sunbird AI Suite</div>
+              <h1>🌻 Sunbird AI GenAI Studio</h1>
+              <p>
+                A premium text and voice intelligence workspace for summarization, translation,
+                and speech synthesis in Ugandan local languages.
+              </p>
+              <div class="hero-pipeline">
+                <span>Input</span>
+                <span>Transcribe</span>
+                <span>Summarize</span>
+                <span>Translate</span>
+                <span>Synthesize</span>
+              </div>
+            </div>
+            """
+        )
+
+        with gr.Row(equal_height=True):
+            with gr.Column(scale=5, elem_classes=["panel-card"]):
+                gr.Markdown("### Configure Input")
+                input_type = gr.Radio(
+                    choices=["text", "audio"],
+                    value="text",
+                    label="Input Type",
+                    elem_classes=["control-input-type"]
+                )
+
+                target_language = gr.Dropdown(
+                    choices=list(LANGUAGE_MAPPING.keys()),
+                    value="Luganda",
+                    label="Target Language",
+                    elem_classes=["control-language"]
+                )
+
+                text_input = gr.Textbox(
+                    label="Text Input",
+                    placeholder="Enter or paste text here...",
+                    lines=8,
+                    visible=True
+                )
+
+                audio_input = gr.Audio(
+                    label="Audio Input",
+                    type="numpy",
+                    visible=False
+                )
+
+                process_btn = gr.Button("✨ Process with Sunbird AI", variant="primary", size="lg")
+            with gr.Column(scale=4, elem_classes=["panel-card", "tips-panel"]):
+                gr.Markdown(
+                    """
+                    ### Usage Guide
+                    - Choose text or audio input mode.
+                    - Pick your target Ugandan language.
+                    - Click process and review all pipeline outputs.
+
+                    **Supported Languages:** Luganda, Runyankole, Ateso, Lugbara, Acholi.
+                    **Audio Limit:** Up to 5 minutes per upload.
+                    """
+                )
+
+        gr.Markdown("## Results", elem_classes=["results-title"])
+
+        with gr.Row():
+            with gr.Column(scale=1, elem_classes=["panel-card"]):
+                original_text_output = gr.Textbox(
+                    label="📝 Original Text / Transcript",
+                    lines=5,
+                    interactive=False
+                )
+
+                summary_output = gr.Textbox(
+                    label="📌 Summary",
+                    lines=4,
+                    interactive=False
+                )
+
+                translated_output = gr.Textbox(
+                    label="🌍 Translated Summary",
+                    lines=4,
+                    interactive=False
+                )
+
+                audio_output = gr.Audio(
+                    label="🔊 Synthesized Speech",
+                    type="numpy",
+                    interactive=False
+                )
+
+                status_output = gr.Textbox(
+                    label="Status",
+                    interactive=False,
+                    show_label=True
+                )
+
         # Update visibility based on input_type
         def update_input_visibility(choice):
             return (
                 gr.Textbox(visible=(choice == "text")),
                 gr.Audio(visible=(choice == "audio"))
             )
-        
+
         input_type.change(
             fn=update_input_visibility,
             inputs=input_type,
             outputs=[text_input, audio_input]
         )
-        
-        # Process button
-        process_btn = gr.Button("🚀 Process", variant="primary", size="lg")
-        
-        # Output section
-        gr.Markdown("### Results")
-        
-        with gr.Group():
-            original_text_output = gr.Textbox(
-                label="📝 Original Text / Transcript",
-                lines=4,
-                interactive=False
-            )
-            
-            summary_output = gr.Textbox(
-                label="📌 Summary",
-                lines=3,
-                interactive=False
-            )
-            
-            translated_output = gr.Textbox(
-                label="🌍 Translated Summary",
-                lines=3,
-                interactive=False
-            )
-            
-            audio_output = gr.Audio(
-                label="🔊 Synthesized Speech",
-                type="numpy",
-                interactive=False
-            )
-            
-            status_output = gr.Textbox(
-                label="Status",
-                interactive=False,
-                show_label=True
-            )
-        
+
         # Connect process button
         process_btn.click(
             fn=process_input,
@@ -246,28 +269,6 @@ def create_interface():
                 status_output
             ]
         )
-        
-        # Example usage
-        gr.Markdown("""
-        ---
-        ### 📚 How it works
-        
-        1. **Choose Input**: Select text or audio
-        2. **Pick Language**: Choose your target Ugandan language (Luganda, Runyankole, Ateso, Lugbara, Acholi)
-        3. **Process**: Click the button
-        4. **Review Results**: See transcript/text, summary, translation, and hear the audio
-        
-        **Supported Languages:**
-        - Luganda
-        - Runyankole
-        - Ateso
-        - Lugbara
-        - Acholi
-        
-        **Constraints:**
-        - Audio files limited to 5 minutes
-        - Powered by Sunbird AI's Sunflower LLM
-        """)
     
     return app
 
@@ -278,9 +279,111 @@ if __name__ == "__main__":
         server_name="0.0.0.0",
         server_port=int(os.getenv("PORT", 7860)),
         share=False,
-        theme=gr.themes.Soft(),
+        theme=gr.themes.Soft(
+            primary_hue="emerald",
+            secondary_hue="teal",
+            neutral_hue="slate",
+            spacing_size="md",
+            radius_size="lg",
+            text_size="md"
+        ),
         css="""
-            .tab-nav { margin-bottom: 10px; }
-            .container { max-width: 900px; margin: 0 auto; }
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+            body, .gradio-container {
+                font-family: 'Inter', sans-serif !important;
+                background: radial-gradient(circle at 10% 10%, #dcfce7 0%, #f8fafc 45%, #eff6ff 100%);
+            }
+
+            .app-shell {
+                max-width: 1050px;
+                margin: 24px auto !important;
+            }
+
+            .hero {
+                background: linear-gradient(135deg, #0f172a 0%, #14532d 55%, #0e7490 100%);
+                color: #f8fafc;
+                border-radius: 20px;
+                padding: 26px 30px;
+                margin-bottom: 18px;
+                box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);
+            }
+
+            .hero-badge {
+                display: inline-block;
+                background: rgba(255, 255, 255, 0.16);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-radius: 999px;
+                font-size: 12px;
+                font-weight: 600;
+                letter-spacing: 0.6px;
+                text-transform: uppercase;
+                padding: 6px 12px;
+                margin-bottom: 8px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+                line-height: 1.15;
+                margin: 6px 0 10px;
+            }
+
+            .hero p {
+                color: rgba(241, 245, 249, 0.95);
+                font-size: 1rem;
+                margin-bottom: 14px;
+                max-width: 780px;
+            }
+
+            .hero-pipeline {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .hero-pipeline span {
+                background: rgba(248, 250, 252, 0.14);
+                border: 1px solid rgba(248, 250, 252, 0.25);
+                border-radius: 999px;
+                padding: 5px 12px;
+                font-size: 12px;
+                font-weight: 500;
+            }
+
+            .panel-card {
+                background: rgba(255, 255, 255, 0.82);
+                border: 1px solid rgba(148, 163, 184, 0.28);
+                border-radius: 16px;
+                padding: 14px !important;
+                box-shadow: 0 10px 30px rgba(2, 6, 23, 0.07);
+                backdrop-filter: blur(8px);
+            }
+
+            .tips-panel {
+                background: linear-gradient(180deg, rgba(226, 232, 240, 0.7), rgba(240, 253, 244, 0.75));
+            }
+
+            .results-title h2 {
+                margin: 4px 0 2px;
+                color: #0f172a;
+            }
+
+            button.primary {
+                background: linear-gradient(90deg, #16a34a, #0891b2) !important;
+                border: none !important;
+                box-shadow: 0 8px 24px rgba(8, 145, 178, 0.28);
+                transition: transform 0.15s ease, filter 0.2s ease;
+            }
+
+            button.primary:hover {
+                transform: translateY(-1px);
+                filter: saturate(1.08);
+            }
+
+            .gradio-container textarea,
+            .gradio-container input,
+            .gradio-container .wrap {
+                border-radius: 12px !important;
+            }
         """
     )
