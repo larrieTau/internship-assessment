@@ -197,14 +197,11 @@ git push origin main
 #### Step 2: Create Vercel Account & Link Project
 
 ```bash
-# Install Vercel CLI
-npm i -g vercel@latest
-
-# Login to Vercel (creates account if needed)
-vercel login
+# Use the CLI without a global install
+npx vercel login
 
 # Link project
-vercel link
+npx vercel link
 ```
 
 When prompted:
@@ -216,12 +213,10 @@ When prompted:
 #### Step 3: Add Environment Variables
 
 ```bash
-# Add Sunbird API token as secret
-vercel env add SUNBIRD_API_TOKEN
-
-# You'll be prompted for:
-# 1. Enter value for SUNBIRD_API_TOKEN: sk_...
-# 2. Select environments: Choose "Development", "Preview", "Production"
+# Add the Sunbird API token in the Vercel dashboard
+# Project Settings -> Environment Variables
+# Key: SUNBIRD_API_TOKEN
+# Value: sk_...
 ```
 
 #### Step 4: Deploy

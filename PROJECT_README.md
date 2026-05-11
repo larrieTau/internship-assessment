@@ -74,7 +74,7 @@ This is a web application that processes text or audio files through a sophistic
    cp .env.example .env.local
 
    # Edit .env.local and add your Sunbird API token
-   # NEXT_PUBLIC_SUNBIRD_API_TOKEN=your_token_here
+   # SUNBIRD_API_TOKEN=your_token_here
    ```
 
 4. **Install Node.js dependencies**
@@ -105,7 +105,7 @@ This is a web application that processes text or audio files through a sophistic
 | Variable              | Description                                               | Example                 |
 | --------------------- | --------------------------------------------------------- | ----------------------- |
 | `SUNBIRD_API_TOKEN`   | Your Sunbird AI API authentication token                  | `sk_...`                |
-| `NEXT_PUBLIC_API_URL` | Frontend API endpoint (defaults to http://localhost:3000) | `http://localhost:3000` |
+| `NEXT_PUBLIC_API_URL` | Frontend API endpoint for local development only          | `http://localhost:5000` |
 
 ### Getting Your API Token
 
@@ -275,6 +275,8 @@ Example error messages:
 ## 🚢 Deployment (Part 3)
 
 See the main [README.md](../README.md) for deployment instructions to Vercel.
+
+For Vercel production, the frontend uses relative `/api/*` routes and the backend runs as serverless Python functions.
 
 ---
 

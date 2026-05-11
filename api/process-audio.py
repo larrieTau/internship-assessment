@@ -1,19 +1,18 @@
-"""Compatibility endpoint for the root /api route."""
+"""Audio processing route for Vercel."""
 from http.server import BaseHTTPRequestHandler
 
 from ._shared import send_json
 
 
 class handler(BaseHTTPRequestHandler):
-    def do_GET(self):
+    def do_POST(self):
         send_json(
             self,
             {
-                "status": "ok",
-                "routes": ["/api/health", "/api/process-text", "/api/process-audio"],
+                "error": "Audio upload is not supported in the Vercel serverless build yet.",
             },
+            501,
         )
 
     def do_OPTIONS(self):
         send_json(self, {"status": "ok"})
-
