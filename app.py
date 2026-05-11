@@ -289,101 +289,194 @@ if __name__ == "__main__":
         ),
         css="""
             @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
 
             body, .gradio-container {
                 font-family: 'Inter', sans-serif !important;
-                background: radial-gradient(circle at 10% 10%, #dcfce7 0%, #f8fafc 45%, #eff6ff 100%);
+                color: #dbe7ff;
+                background:
+                    radial-gradient(1200px 500px at 8% -10%, rgba(56, 189, 248, 0.26), transparent 58%),
+                    radial-gradient(900px 500px at 92% -10%, rgba(34, 197, 94, 0.22), transparent 56%),
+                    linear-gradient(145deg, #020617 0%, #0a1022 42%, #101a36 100%);
             }
 
             .app-shell {
-                max-width: 1050px;
-                margin: 24px auto !important;
+                max-width: 1120px;
+                margin: 30px auto !important;
+                padding: 0 8px;
             }
 
             .hero {
-                background: linear-gradient(135deg, #0f172a 0%, #14532d 55%, #0e7490 100%);
+                position: relative;
+                overflow: hidden;
+                background:
+                    radial-gradient(circle at 16% 20%, rgba(56, 189, 248, 0.35), transparent 36%),
+                    radial-gradient(circle at 86% 24%, rgba(45, 212, 191, 0.32), transparent 33%),
+                    linear-gradient(140deg, #0b1225 0%, #111f42 45%, #1a2f67 100%);
                 color: #f8fafc;
-                border-radius: 20px;
-                padding: 26px 30px;
-                margin-bottom: 18px;
-                box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);
+                border: 1px solid rgba(148, 163, 184, 0.22);
+                border-radius: 28px;
+                padding: 34px 34px;
+                margin-bottom: 20px;
+                box-shadow:
+                    0 24px 65px rgba(6, 12, 31, 0.55),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+            }
+
+            .hero::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(100deg, transparent 15%, rgba(255, 255, 255, 0.08) 50%, transparent 80%);
+                transform: translateX(-120%);
+                animation: hero-shimmer 8s linear infinite;
+                pointer-events: none;
+            }
+
+            @keyframes hero-shimmer {
+                to { transform: translateX(120%); }
             }
 
             .hero-badge {
                 display: inline-block;
-                background: rgba(255, 255, 255, 0.16);
-                border: 1px solid rgba(255, 255, 255, 0.3);
+                background: rgba(14, 165, 233, 0.2);
+                border: 1px solid rgba(103, 232, 249, 0.6);
                 border-radius: 999px;
                 font-size: 12px;
-                font-weight: 600;
-                letter-spacing: 0.6px;
+                font-weight: 700;
+                letter-spacing: 0.8px;
                 text-transform: uppercase;
-                padding: 6px 12px;
-                margin-bottom: 8px;
+                color: #dff7ff;
+                padding: 7px 13px;
+                margin-bottom: 10px;
+                box-shadow: 0 8px 22px rgba(14, 165, 233, 0.26);
             }
 
             .hero h1 {
-                font-size: 2rem;
+                font-family: 'Plus Jakarta Sans', sans-serif;
+                font-size: clamp(2rem, 4vw, 2.8rem);
                 line-height: 1.15;
-                margin: 6px 0 10px;
+                letter-spacing: -0.02em;
+                margin: 6px 0 12px;
+                text-shadow: 0 8px 30px rgba(2, 6, 23, 0.4);
             }
 
             .hero p {
-                color: rgba(241, 245, 249, 0.95);
-                font-size: 1rem;
-                margin-bottom: 14px;
-                max-width: 780px;
+                color: rgba(219, 234, 254, 0.9);
+                font-size: 1.02rem;
+                margin-bottom: 18px;
+                max-width: 760px;
             }
 
             .hero-pipeline {
                 display: flex;
                 flex-wrap: wrap;
-                gap: 8px;
+                gap: 10px;
             }
 
             .hero-pipeline span {
-                background: rgba(248, 250, 252, 0.14);
-                border: 1px solid rgba(248, 250, 252, 0.25);
+                background: rgba(15, 23, 42, 0.45);
+                border: 1px solid rgba(125, 211, 252, 0.45);
                 border-radius: 999px;
-                padding: 5px 12px;
+                color: #dff5ff;
+                padding: 6px 13px;
                 font-size: 12px;
-                font-weight: 500;
+                font-weight: 600;
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
             }
 
             .panel-card {
-                background: rgba(255, 255, 255, 0.82);
-                border: 1px solid rgba(148, 163, 184, 0.28);
-                border-radius: 16px;
-                padding: 14px !important;
-                box-shadow: 0 10px 30px rgba(2, 6, 23, 0.07);
-                backdrop-filter: blur(8px);
+                background:
+                    linear-gradient(180deg, rgba(15, 23, 42, 0.88), rgba(17, 24, 39, 0.9)),
+                    linear-gradient(120deg, rgba(56, 189, 248, 0.08), transparent 40%);
+                border: 1px solid rgba(148, 163, 184, 0.22);
+                border-radius: 22px;
+                padding: 18px !important;
+                box-shadow:
+                    0 20px 45px rgba(1, 6, 22, 0.42),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+                backdrop-filter: blur(10px);
             }
 
             .tips-panel {
-                background: linear-gradient(180deg, rgba(226, 232, 240, 0.7), rgba(240, 253, 244, 0.75));
+                background:
+                    linear-gradient(180deg, rgba(13, 31, 60, 0.94), rgba(17, 52, 64, 0.9)),
+                    radial-gradient(circle at top right, rgba(45, 212, 191, 0.2), transparent 40%);
             }
 
             .results-title h2 {
-                margin: 4px 0 2px;
-                color: #0f172a;
+                font-family: 'Plus Jakarta Sans', sans-serif;
+                margin: 8px 0 4px;
+                color: #e2edff;
+                letter-spacing: -0.01em;
             }
 
             button.primary {
-                background: linear-gradient(90deg, #16a34a, #0891b2) !important;
-                border: none !important;
-                box-shadow: 0 8px 24px rgba(8, 145, 178, 0.28);
-                transition: transform 0.15s ease, filter 0.2s ease;
+                min-height: 50px !important;
+                border: 1px solid rgba(125, 211, 252, 0.35) !important;
+                background:
+                    linear-gradient(92deg, #06b6d4 0%, #3b82f6 46%, #8b5cf6 100%) !important;
+                color: #f8fbff !important;
+                font-weight: 700 !important;
+                letter-spacing: 0.01em;
+                box-shadow:
+                    0 15px 35px rgba(59, 130, 246, 0.35),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+                transition: transform 0.18s ease, filter 0.25s ease, box-shadow 0.25s ease;
             }
 
             button.primary:hover {
-                transform: translateY(-1px);
-                filter: saturate(1.08);
+                transform: translateY(-2px);
+                filter: saturate(1.15) brightness(1.04);
+                box-shadow:
+                    0 20px 44px rgba(59, 130, 246, 0.45),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+            }
+
+            .gr-form, .gr-box, .gr-group {
+                border-color: rgba(148, 163, 184, 0.26) !important;
+                background: rgba(30, 41, 59, 0.55) !important;
             }
 
             .gradio-container textarea,
             .gradio-container input,
             .gradio-container .wrap {
-                border-radius: 12px !important;
+                border-radius: 14px !important;
+                background: rgba(30, 41, 59, 0.86) !important;
+                color: #e2e8f0 !important;
+                border: 1px solid rgba(148, 163, 184, 0.3) !important;
+            }
+
+            .gradio-container textarea:focus,
+            .gradio-container input:focus {
+                border-color: rgba(56, 189, 248, 0.75) !important;
+                box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2) !important;
+            }
+
+            .gradio-container label,
+            .gradio-container .block-title,
+            .gradio-container .prose,
+            .gradio-container .prose * {
+                color: #d8e7ff !important;
+            }
+
+            .gradio-container .prose strong {
+                color: #f8fbff !important;
+            }
+
+            .gradio-container audio {
+                border-radius: 14px;
+                background: rgba(15, 23, 42, 0.8);
+            }
+
+            @media (max-width: 900px) {
+                .hero {
+                    padding: 26px 20px;
+                    border-radius: 22px;
+                }
+                .panel-card {
+                    padding: 14px !important;
+                }
             }
         """
     )
