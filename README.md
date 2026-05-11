@@ -1,19 +1,31 @@
 # Sunbird AI Internship Assessment Exercise
 
+> **📖 For complete implementation details, architecture overview, and deployment guide, see [PROJECT_README.md](PROJECT_README.md) and [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)**
+
 This assessment consists of 3 parts:
 - Programming exercises.
 - Build a simple command line app using the Sunbird AI API.
 
-## Getting started
-- Fork this repository to create your own copy. ([More info about forking a repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo))
-- Clone your repository to access it locally: `git clone https://github.com/<your-username>/internship-assessment.git`. (Replace `<your-username>` with your Github username.)
-- Change directory into the `internship-assessment` folder after cloning the repository.
-- Create a python virtual environment: `python -m venv venv`
-- Activate the virtual environment: 
-  - Linux/Mac: `source venv/bin/activate`
-  - Windows: `venv\Scripts\activate.bat`
-- Install the required python packages: `pip install -r requirements.txt`
-- Run the command `pytest`. (The tests should be failing, it's your task to make them pass. See below for instructions)
+## ⚡ Quick Start
+
+```bash
+# 1. Clone and setup
+git clone https://github.com/<your-username>/internship-assessment.git
+cd internship-assessment
+python3 -m venv venv
+source venv/bin/activate  # or: venv\Scripts\activate.bat on Windows
+pip install -r requirements.txt
+
+# 2. Part 1: Run tests (should already pass)
+pytest -v
+
+# 3. Part 2: Run the app (requires SUNBIRD_API_TOKEN in .env)
+cp .env.example .env
+# Edit .env and add your API token
+python app.py
+```
+
+The app will be available at `http://localhost:7860`
 
 ## Part 1: Programming exercises
 There are 2 programming exercises designed to test your competency with the python programming language. 
