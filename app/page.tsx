@@ -41,6 +41,19 @@ function extractAudioUrl(payload: ResultData) {
   return null;
 }
 
+function extractAudioMessage(payload: ResultData) {
+  const audio = payload?.pipeline ? (payload.pipeline as Record<string, unknown>).audio : undefined;
+
+  if (audio && typeof audio === "object") {
+    const candidate = audio as Record<string, unknown>;
+    if (typeof candidate.message === "string" && candidate.message.trim()) {
+      return candidate.message;
+    }
+  }
+
+  return null;
+}
+
 export default function Home() {
   const [mode, setMode] = useState<"text" | "audio">("text");
   const [text, setText] = useState(
@@ -137,6 +150,7 @@ export default function Home() {
     ? (result.pipeline as Record<string, unknown>).translation
     : null;
   const audioUrl = extractAudioUrl(result);
+  const audioMessage = extractAudioMessage(result);
 
   return (
     <main className="page-shell">
@@ -246,6 +260,8 @@ export default function Home() {
           <h2>Audio output</h2>
           {audioUrl ? (
             <audio controls src={audioUrl} />
+          ) : audioMessage ? (
+            <p>{audioMessage}</p>
           ) : (
             <p>No audio generated yet.</p>
           )}

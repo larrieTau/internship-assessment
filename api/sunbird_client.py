@@ -127,8 +127,12 @@ class SunbirdClient:
         Generate audio from text using Text-to-Speech API.
         """
         if self.mock:
-            # Mock TTS by returning a fake URL
-            return {"audio_url": "https://example.com/mock_tts_audio.mp3"}
+            # In mock mode, avoid returning a fake URL that breaks the audio player.
+            return {
+                "audio_url": None,
+                "message": "Mock mode is enabled. Add SUNBIRD_API_TOKEN to generate playable audio.",
+                "mock": True,
+            }
 
         url = f"{self.BASE_URL}/tasks/modal/tts"
         payload = {
