@@ -2,14 +2,40 @@
 Thin wrapper around Sunbird AI API endpoints.
 Handles authentication and request/response formatting.
 """
+import base64
+import math
 import os
 import requests
+import struct
+import wave
+from io import BytesIO
 from typing import Optional, Dict, Any
 
 class SunbirdClient:
     """Client for interacting with Sunbird AI APIs."""
     
     BASE_URL = "https://api.sunbird.ai"
+
+    @staticmethod
+    def _mock_tts_data_uri(duration_seconds: float = 1.0, sample_rate: int = 22050) -> str:
+        """Generate a short WAV tone as a data URI for mock-mode playback."""
+        amplitude = 0.3
+        frequency_hz = 440.0
+        total_samples = int(sample_rate * duration_seconds)
+
+        pcm = BytesIO()
+        with wave.open(pcm, "wb") as wav_file:
+            wav_file.setnchannels(1)
+            wav_file.setsampwidth(2)
+            wav_file.setframerate(sample_rate)
+
+            for n in range(total_samples):
+                value = amplitude * math.sin(2.0 * math.pi * frequency_hz * (n / sample_rate))
+                sample = int(max(-1.0, min(1.0, value)) * 32767)
+                wav_file.writeframes(struct.pack("<h", sample))
+
+        encoded = base64.b64encode(pcm.getvalue()).decode("ascii")
+        return f"data:audio/wav;base64,{encoded}"
     
     def __init__(self, api_token: Optional[str] = None):
         """Initialize with API token from environment or parameter."""
@@ -127,9 +153,9 @@ class SunbirdClient:
         Generate audio from text using Text-to-Speech API.
         """
         if self.mock:
-            # In mock mode, avoid returning a fake URL that breaks the audio player.
+            # In mock mode, return a playable data URI so the audio section still functions.
             return {
-                "audio_url": None,
+                "audio_url": self._mock_tts_data_uri(),
                 "message": "Mock mode is enabled. Add SUNBIRD_API_TOKEN to generate playable audio.",
                 "mock": True,
             }
