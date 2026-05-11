@@ -6,8 +6,9 @@
   "env": {
     "SUNBIRD_API_TOKEN": "@sunbird_api_token"
   },
-  "envFile": ".env.production",
-  "python": {
-    "version": "3.11"
+  "functions": {
+    "api/**/*.py": {
+      "runtime": "python3.11"
+    }
   }
 }
