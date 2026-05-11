@@ -13,8 +13,14 @@ const languageOptions = [
 ];
 
 function resolveApiUrl(path: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://localhost:5000";
-  return `${baseUrl}${path}`;
+  // In production (Vercel), use relative paths to /api
+  // In development, use the configured backend URL
+  if (typeof window !== "undefined" && window.location.hostname === "localhost") {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://localhost:5000";
+    return `${baseUrl}${path}`;
+  }
+  // Production: use Vercel's /api routes
+  return path;
 }
 
 function extractAudioUrl(payload: ResultData) {

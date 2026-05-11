@@ -2,5 +2,12 @@
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "framework": "nextjs",
-  "regions": ["iad1"]
+  "regions": ["iad1"],
+  "env": {
+    "SUNBIRD_API_TOKEN": "@sunbird_api_token"
+  },
+  "envFile": ".env.production",
+  "python": {
+    "version": "3.11"
+  }
 }

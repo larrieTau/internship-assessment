@@ -1,102 +1,89 @@
 """
-Vercel Python API handler - main entry point for serverless functions.
-Routes requests to appropriate handlers.
+Vercel serverless API handler for Sunbird AI processing.
+Entry point: /api/ routes in Vercel deployment.
 """
-import os
 import json
-from http.server import BaseHTTPRequestHandler
-from urllib.parse import parse_qs, urlparse
-from pipeline import ProcessingPipeline
+import os
+from typing import Dict, Any
+
+try:
+    from .pipeline import ProcessingPipeline
+except ImportError:
+    # Fallback for Vercel environment
+    import sys
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from pipeline import ProcessingPipeline
 
 
-class handler(BaseHTTPRequestHandler):
-    """Handler for Vercel serverless functions."""
+def cors_headers() -> Dict[str, str]:
+    """Return CORS headers for all responses."""
+    return {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Content-Type": "application/json",
+    }
+
+
+def error_response(message: str, status_code: int = 500) -> tuple:
+    """Return standardized error response."""
+    return (
+        json.dumps({"error": message}),
+        status_code,
+        cors_headers(),
+    )
+
+
+def success_response(data: Any, status_code: int = 200) -> tuple:
+    """Return standardized success response."""
+    return (
+        json.dumps(data),
+        status_code,
+        cors_headers(),
+    )
+
+
+def handler(request):
+    """Main Vercel serverless function handler."""
+    # Handle CORS preflight
+    if request.method == "OPTIONS":
+        return "", 200, cors_headers()
     
-    def do_POST(self):
-        """Handle POST requests."""
-        content_length = int(self.headers.get('Content-Length', 0))
-        body = self.rfile.read(content_length).decode('utf-8')
-        
+    # Health check endpoint
+    if request.path == "/api/health" and request.method == "GET":
+        return success_response({"status": "healthy"})
+    
+    # Process text endpoint
+    if request.path == "/api/process-text" and request.method == "POST":
         try:
-            data = json.loads(body)
-        except json.JSONDecodeError:
-            self.send_response(400)
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({"error": "Invalid JSON"}).encode())
-            return
-        
-        path = urlparse(self.path).path
-        
-        # Route: /api/process-text
-        if path == '/api/process-text':
-            return self.process_text(data)
-        
-        # Route: /api/process-audio
-        elif path == '/api/process-audio':
-            return self.process_audio(data)
-        
-        # Route not found
-        else:
-            self.send_response(404)
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({"error": "Endpoint not found"}).encode())
-    
-    def do_GET(self):
-        """Handle GET requests (health check, etc)."""
-        path = urlparse(self.path).path
-        
-        if path == '/api/health':
-            self.send_response(200)
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({"status": "healthy"}).encode())
-        else:
-            self.send_response(404)
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({"error": "Endpoint not found"}).encode())
-    
-    def do_OPTIONS(self):
-        """Handle CORS preflight requests."""
-        self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.end_headers()
-    
-    def process_text(self, data):
-        """Process text input through the pipeline."""
-        try:
-            text = data.get('text')
-            target_language = data.get('target_language', 'luganda')
+            data = request.json
+            text = data.get("text")
+            target_language = data.get("target_language", "luganda")
             
             if not text:
-                raise ValueError("Text input is required")
+                return error_response("Text input is required", 400)
             
             pipeline = ProcessingPipeline()
             result = pipeline.process_text_input(text, target_language)
+            return success_response(result)
             
-            self.send_response(200)
-            self.send_header('Content-Type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(json.dumps(result).encode())
+        except json.JSONDecodeError:
+            return error_response("Invalid JSON", 400)
+        except Exception as e:
+            return error_response(f"Error processing text: {str(e)}", 500)
+    
+    # Process audio endpoint
+    if request.path == "/api/process-audio" and request.method == "POST":
+        try:
+            # Audio processing via multipart form data
+            # Note: requires additional setup for file uploads in Vercel
+            return error_response("Audio upload not yet supported", 501)
             
         except Exception as e:
-            self.send_response(500)
-            self.send_header('Content-Type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(json.dumps({"error": str(e)}).encode())
+            return error_response(f"Error processing audio: {str(e)}", 500)
     
-    def process_audio(self, data):
-        """Process audio input through the pipeline."""
-        try:
-            # Note: In production, you'd handle file uploads differently
-            # This is a placeholder for the audio processing endpoint
-            raise NotImplementedError("Audio upload handling requires multipart/form-data support")
+    # Not found
+    return error_response("Endpoint not found", 404)
             
         except Exception as e:
             self.send_response(500)

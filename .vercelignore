@@ -1,0 +1,16 @@
+server.py
+.env
+.env.local
+.env.example
+__pycache__
+*.pyc
+.pytest_cache
+venv/
+node_modules/
+.git/
+.gitignore
+README.md
+PROJECT_README.md
+tests/
+.next/
+*.md
