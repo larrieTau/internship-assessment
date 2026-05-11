@@ -3,9 +3,6 @@
   "devCommand": "npm run dev",
   "framework": "nextjs",
   "regions": ["iad1"],
-  "env": {
-    "SUNBIRD_API_TOKEN": "@sunbird_api_token"
-  },
   "functions": {
     "api/**/*.py": {
       "runtime": "python3.11"
