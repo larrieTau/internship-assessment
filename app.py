@@ -146,14 +146,7 @@ def process_input(
 def create_interface():
     """Create and return the Gradio interface."""
     
-    with gr.Blocks(
-        title="Sunbird AI GenAI App",
-        theme=gr.themes.Soft(),
-        css="""
-            .tab-nav { margin-bottom: 10px; }
-            .container { max-width: 900px; margin: 0 auto; }
-        """
-    ) as app:
+    with gr.Blocks(title="Sunbird AI GenAI App") as app:
         
         gr.Markdown("""
         # 🌻 Sunbird AI GenAI Application
@@ -167,15 +160,13 @@ def create_interface():
             input_type = gr.Radio(
                 choices=["text", "audio"],
                 value="text",
-                label="Input Type",
-                info="Choose between text or audio input"
+                label="Input Type"
             )
             
             target_language = gr.Dropdown(
                 choices=list(LANGUAGE_MAPPING.keys()),
                 value="Luganda",
-                label="Target Language",
-                info="Select a Ugandan language for translation"
+                label="Target Language"
             )
         
         # Conditional inputs based on input_type
@@ -184,15 +175,13 @@ def create_interface():
                 label="Text Input",
                 placeholder="Enter or paste text here...",
                 lines=5,
-                visible=True,
-                info="Paste the text you want to summarize and translate"
+                visible=True
             )
             
             audio_input = gr.Audio(
                 label="Audio Input",
                 type="numpy",
-                visible=False,
-                info="Upload an audio file (max 5 minutes)"
+                visible=False
             )
         
         # Update visibility based on input_type
@@ -288,5 +277,10 @@ if __name__ == "__main__":
     app.launch(
         server_name="0.0.0.0",
         server_port=int(os.getenv("PORT", 7860)),
-        share=False
+        share=False,
+        theme=gr.themes.Soft(),
+        css="""
+            .tab-nav { margin-bottom: 10px; }
+            .container { max-width: 900px; margin: 0 auto; }
+        """
     )
