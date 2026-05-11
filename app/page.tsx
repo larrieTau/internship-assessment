@@ -36,6 +36,24 @@ function extractAudioUrl(payload: ResultData) {
     if (typeof rawUrl === "string") {
       return rawUrl;
     }
+
+    const output = candidate.output;
+    if (output && typeof output === "object") {
+      const nested = output as Record<string, unknown>;
+      const nestedUrl = nested.audio_url ?? nested.url ?? nested.href;
+      if (typeof nestedUrl === "string") {
+        return nestedUrl;
+      }
+    }
+
+    const data = candidate.data;
+    if (Array.isArray(data) && data.length > 0 && typeof data[0] === "object") {
+      const first = data[0] as Record<string, unknown>;
+      const listUrl = first.audio_url ?? first.url ?? first.href;
+      if (typeof listUrl === "string") {
+        return listUrl;
+      }
+    }
   }
 
   return null;
@@ -151,6 +169,7 @@ export default function Home() {
     : null;
   const audioUrl = extractAudioUrl(result);
   const audioMessage = extractAudioMessage(result);
+  const isMockMode = Boolean(result && typeof result === "object" && (result as Record<string, unknown>).mock_mode);
 
   return (
     <main className="page-shell">
@@ -260,6 +279,8 @@ export default function Home() {
           <h2>Audio output</h2>
           {audioUrl ? (
             <audio controls src={audioUrl} />
+          ) : isMockMode ? (
+            <p>Mock mode is active. Add a valid <strong>SUNBIRD_API_TOKEN</strong> in Vercel to generate real audio.</p>
           ) : audioMessage ? (
             <p>{audioMessage}</p>
           ) : (

@@ -100,6 +100,7 @@ class ProcessingPipeline:
         results = {
             "input": text,
             "target_language": target_language,
+            "mock_mode": self.client.mock,
             "pipeline": {}
         }
         
@@ -154,6 +155,7 @@ class ProcessingPipeline:
         results = {
             "input_type": "audio",
             "target_language": target_language,
+            "mock_mode": self.client.mock,
             "pipeline": {}
         }
         
