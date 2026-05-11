@@ -28,6 +28,6 @@
       }
     ]
   },
-  "include": ["app/**/*", "next.config.ts", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "app/**/*", "next.config.ts", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

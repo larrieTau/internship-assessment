@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 
 type ResultData = Record<string, unknown> | null;
 
@@ -73,6 +73,7 @@ function extractAudioMessage(payload: ResultData) {
 }
 
 export default function Home() {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   const [mode, setMode] = useState<"text" | "audio">("text");
   const [text, setText] = useState(
     "Climate change is affecting crop yields, water availability, and communities across East Africa.",
@@ -94,6 +95,27 @@ export default function Home() {
       type: audioFile.type || "unknown",
     };
   }, [audioFile]);
+
+  useEffect(() => {
+    const storedTheme = window.localStorage.getItem("sunbird-theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const nextTheme = storedTheme === "dark" || storedTheme === "light"
+      ? storedTheme
+      : prefersDark
+        ? "dark"
+        : "light";
+
+    setTheme(nextTheme);
+  }, []);
+
+  useEffect(() => {
+    document.body.dataset.theme = theme;
+    window.localStorage.setItem("sunbird-theme", theme);
+  }, [theme]);
+
+  function toggleTheme() {
+    setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -175,36 +197,42 @@ export default function Home() {
     <main className="page-shell">
       <section className="hero-card">
         <div className="hero-copy">
-          <p className="eyebrow">Sunbird AI pipeline</p>
-          <h1>Turn text or audio into a translated, spoken result.</h1>
-          <p className="lede">
-            Process content through transcription, summarization, translation, and text-to-speech in
-            one flow. The page uses the backend at <code>/api/process-text</code> and
-            <code> /api/process-audio</code>, or a custom base URL if you set
-            <code> NEXT_PUBLIC_API_URL</code>.
-          </p>
+          <p className="eyebrow">Sunbird AI studio</p>
+          <h1>Turn content into speech.</h1>
+          <p className="lede">A refined workspace for translation, transcription, and voice.</p>
           <div className="hero-badges">
-            <span>Text input</span>
-            <span>Audio upload</span>
-            <span>5 Ugandan languages</span>
+            <span>Text</span>
+            <span>Audio</span>
+            <span>Classic orange</span>
           </div>
         </div>
 
         <form className="panel" onSubmit={handleSubmit}>
-          <div className="mode-switch" role="tablist" aria-label="Input mode">
+          <div className="panel-toolbar">
+            <div className="mode-switch" role="tablist" aria-label="Input mode">
+              <button
+                type="button"
+                className={mode === "text" ? "active" : ""}
+                onClick={() => setMode("text")}
+              >
+                Text
+              </button>
+              <button
+                type="button"
+                className={mode === "audio" ? "active" : ""}
+                onClick={() => setMode("audio")}
+              >
+                Audio
+              </button>
+            </div>
+
             <button
               type="button"
-              className={mode === "text" ? "active" : ""}
-              onClick={() => setMode("text")}
+              className="theme-toggle"
+              onClick={toggleTheme}
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             >
-              Text
-            </button>
-            <button
-              type="button"
-              className={mode === "audio" ? "active" : ""}
-              onClick={() => setMode("audio")}
-            >
-              Audio
+              {theme === "dark" ? "Light mode" : "Dark mode"}
             </button>
           </div>
 
