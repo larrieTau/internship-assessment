@@ -98,11 +98,9 @@ function extractAudioMessage(payload: ResultData) {
 export default function Home() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [mode, setMode] = useState<"text" | "audio">("text");
-  const [text, setText] = useState(
-    "Climate change is affecting crop yields, water availability, and communities across East Africa.",
-  );
+  const [text, setText] = useState("");
   const [audioFile, setAudioFile] = useState<File | null>(null);
-  const [targetLanguage, setTargetLanguage] = useState("luganda");
+  const [targetLanguage, setTargetLanguage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState<ResultData>(null);
@@ -317,114 +315,119 @@ export default function Home() {
           </ol>
         </section>
 
-        <form className="panel" onSubmit={handleSubmit}>
-          <div className="panel-toolbar">
-            <div className="mode-switch" role="tablist" aria-label="Input mode">
+        <div className="workflow-content">
+          <form className="panel" onSubmit={handleSubmit}>
+            <div className="panel-toolbar">
+              <div className="mode-switch" role="tablist" aria-label="Input mode">
+                <button
+                  type="button"
+                  className={mode === "text" ? "active" : ""}
+                  onClick={() => setMode("text")}
+                >
+                  Text
+                </button>
+                <button
+                  type="button"
+                  className={mode === "audio" ? "active" : ""}
+                  onClick={() => setMode("audio")}
+                >
+                  Audio
+                </button>
+              </div>
+
               <button
                 type="button"
-                className={mode === "text" ? "active" : ""}
-                onClick={() => setMode("text")}
+                className="theme-toggle"
+                onClick={toggleTheme}
+                aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
               >
-                Text
-              </button>
-              <button
-                type="button"
-                className={mode === "audio" ? "active" : ""}
-                onClick={() => setMode("audio")}
-              >
-                Audio
+                {theme === "dark" ? "Light mode" : "Dark mode"}
               </button>
             </div>
 
-            <button
-              type="button"
-              className="theme-toggle"
-              onClick={toggleTheme}
-              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-            >
-              {theme === "dark" ? "Light mode" : "Dark mode"}
-            </button>
-          </div>
-
-          <label>
-            <span>Target language</span>
-            <select value={targetLanguage} onChange={(event) => setTargetLanguage(event.target.value)}>
-              {languageOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
+            <label>
+              <span>Target language</span>
+              <select value={targetLanguage} onChange={(event) => setTargetLanguage(event.target.value)}>
+                <option value="" disabled>
+                  Select a target language
                 </option>
-              ))}
-            </select>
-          </label>
-
-          {mode === "text" ? (
-            <label>
-              <span>Input text</span>
-              <textarea
-                rows={8}
-                value={text}
-                onChange={(event) => setText(event.target.value)}
-                placeholder="Paste or type your content here"
-              />
+                {languageOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </label>
-          ) : (
-            <label>
-              <span>Audio file</span>
-              <input
-                type="file"
-                accept="audio/*"
-                onChange={(event) => setAudioFile(event.target.files?.[0] ?? null)}
-              />
-            </label>
-          )}
 
-          {audioPreview ? (
-            <div className="file-chip">
-              <strong>{audioPreview.name}</strong>
-              <span>
-                {audioPreview.sizeKb} KB · {audioPreview.type}
-              </span>
-            </div>
-          ) : null}
+            {mode === "text" ? (
+              <label>
+                <span>Input text</span>
+                <textarea
+                  rows={8}
+                  value={text}
+                  onChange={(event) => setText(event.target.value)}
+                  placeholder="Paste or type your content here"
+                />
+              </label>
+            ) : (
+              <label>
+                <span>Audio file</span>
+                <input
+                  type="file"
+                  accept="audio/*"
+                  onChange={(event) => setAudioFile(event.target.files?.[0] ?? null)}
+                />
+              </label>
+            )}
 
-          <button className="submit-button" type="submit" disabled={loading}>
-            {loading ? "Processing..." : "Process now"}
-          </button>
+            {audioPreview ? (
+              <div className="file-chip">
+                <strong>{audioPreview.name}</strong>
+                <span>
+                  {audioPreview.sizeKb} KB · {audioPreview.type}
+                </span>
+              </div>
+            ) : null}
 
-          {error ? <p className="error-box">{error}</p> : null}
-        </form>
-      </section>
+            <button className="submit-button" type="submit" disabled={loading || !hasLanguage}>
+              {loading ? "Processing..." : "Process now"}
+            </button>
 
-      <section className="results-grid">
-        <article className="result-card">
-          <h2>Transcript</h2>
-          <p>{typeof transcript === "string" && transcript ? transcript : "No transcript yet."}</p>
-        </article>
+            {error ? <p className="error-box">{error}</p> : null}
+          </form>
 
-        <article className="result-card">
-          <h2>Summary</h2>
-          <p>{typeof summary === "string" && summary ? summary : "No summary yet."}</p>
-        </article>
+          <section className="workflow-results" aria-label="System output">
+            <article className="result-card">
+              <h2>Transcript</h2>
+              <p>{typeof transcript === "string" && transcript ? transcript : "No transcript yet."}</p>
+            </article>
 
-        <article className="result-card wide">
-          <h2>Translation</h2>
-          <p>
-            {typeof translation === "string" && translation ? translation : "No translation yet."}
-          </p>
-        </article>
+            <article className="result-card">
+              <h2>Summary</h2>
+              <p>{typeof summary === "string" && summary ? summary : "No summary yet."}</p>
+            </article>
 
-        <article className="result-card wide">
-          <h2>Audio output</h2>
-          {audioUrl ? (
-            <audio controls src={audioUrl} />
-          ) : isMockMode ? (
-            <p>Mock mode is active. Add a valid <strong>SUNBIRD_API_TOKEN</strong> in Vercel to generate real audio.</p>
-          ) : audioMessage ? (
-            <p>{audioMessage}</p>
-          ) : (
-            <p>No audio generated yet.</p>
-          )}
-        </article>
+            <article className="result-card">
+              <h2>Translation</h2>
+              <p>
+                {typeof translation === "string" && translation ? translation : "No translation yet."}
+              </p>
+            </article>
+
+            <article className="result-card">
+              <h2>Audio output</h2>
+              {audioUrl ? (
+                <audio controls src={audioUrl} />
+              ) : isMockMode ? (
+                <p>Mock mode is active. Add a valid <strong>SUNBIRD_API_TOKEN</strong> in Vercel to generate real audio.</p>
+              ) : audioMessage ? (
+                <p>{audioMessage}</p>
+              ) : (
+                <p>No audio generated yet.</p>
+              )}
+            </article>
+          </section>
+        </div>
       </section>
     </main>
   );
