@@ -103,12 +103,17 @@ main {
   gap: 60px;
 }
 
-.hero-card {
+.hero-section {
   display: grid;
-  gap: 60px;
-  grid-template-columns: 1.35fr 1fr;
-  align-items: center;
   animation: fadeInDown 0.8s var(--ease-smooth);
+}
+
+.workflow-section {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 40px;
+  align-items: start;
+  animation: fadeInUp 0.8s var(--ease-smooth) 0.15s both;
 }
 
 .panel-toolbar {
@@ -249,6 +254,7 @@ h2 {
   backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
+  height: fit-content;
 }
 
 .panel::before {
@@ -267,6 +273,22 @@ h2 {
 }
 
 .hero-card::after {
+  content: "";
+  position: absolute;
+  inset: auto 10% -40px auto;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(229, 124, 31, 0.18) 0%, rgba(229, 124, 31, 0.02) 68%, transparent 70%);
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+.hero-section {
+  position: relative;
+}
+
+.hero-section::after {
   content: "";
   position: absolute;
   inset: auto 10% -40px auto;
@@ -485,6 +507,14 @@ h2 {
   animation: fadeInUp 0.8s var(--ease-smooth) 0.2s both;
 }
 
+.workflow-section {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 40px;
+  align-items: start;
+  animation: fadeInUp 0.8s var(--ease-smooth) 0.15s both;
+}
+
 .workflow-guide {
   background: var(--surface);
   border-radius: var(--radius-2xl);
@@ -495,6 +525,7 @@ h2 {
   gap: 28px;
   position: relative;
   overflow: hidden;
+  height: fit-content;
 }
 
 .workflow-guide::before {
@@ -755,9 +786,14 @@ h2 {
 }
 
 @media (max-width: 1200px) {
-  .hero-card {
+  .hero-section {
     grid-template-columns: 1fr;
     gap: 48px;
+  }
+
+  .workflow-section {
+    grid-template-columns: 1fr;
+    gap: 40px;
   }
 
   .panel-toolbar {
@@ -773,6 +809,11 @@ h2 {
   .results-grid {
     grid-template-columns: 1fr;
     gap: 24px;
+  }
+
+  .workflow-section {
+    grid-template-columns: 1fr;
+    gap: 32px;
   }
 
   .workflow-guide {
@@ -791,7 +832,7 @@ h2 {
     font-size: 2.2rem;
   }
 
-  .hero-card {
+  .hero-section {
     gap: 32px;
   }
 
@@ -807,6 +848,10 @@ h2 {
 @media (max-width: 600px) {
   main {
     padding: 28px 16px;
+  }
+
+  .workflow-section {
+    grid-template-columns: 1fr;
   }
 
   .workflow-guide {
@@ -838,7 +883,7 @@ h2 {
     font-size: 0.68rem;
   }
 
-  .hero-card {
+  .hero-section {
     gap: 24px;
   }
 
@@ -888,7 +933,7 @@ h2 {
     font-size: 0.8rem;
   }
 
-  .hero-card::after {
+  .hero-section::after {
     width: 120px;
     height: 120px;
     inset: auto 4% -24px auto;

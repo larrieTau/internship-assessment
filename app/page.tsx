@@ -249,7 +249,7 @@ export default function Home() {
 
   return (
     <main className="page-shell">
-      <section className="hero-card">
+      <section className="hero-section">
         <div className="hero-copy">
           <div className="hero-logo-container">
             <img src="/logo.png" alt="Sunbird AI" className="hero-logo" />
@@ -280,6 +280,42 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="workflow-section" aria-label="Interactive workflow and input panel">
+        <section className="workflow-guide" aria-labelledby="workflow-title" aria-live="polite">
+          <div className="workflow-header">
+            <p className="eyebrow">System guide</p>
+            <h2 id="workflow-title">How the system works step by step</h2>
+            <p>
+              Follow this flow to process text or audio from input to final spoken output.
+            </p>
+            <p className="workflow-progress" role="status" aria-label={`Guide progress ${guideProgress} of ${guideSteps.length}`}>
+              Progress: {guideProgress}/{guideSteps.length} steps completed
+            </p>
+          </div>
+
+          <ol className="workflow-list">
+            {guideStepsWithStatus.map((step, index) => (
+              <li
+                key={step.title}
+                className={`workflow-step ${step.status}`}
+                aria-current={step.status === "active" ? "step" : undefined}
+              >
+                <span className="step-number" aria-hidden="true">
+                  {step.status === "completed" ? "OK" : String(index + 1).padStart(2, "0")}
+                </span>
+                <div className="step-content">
+                  <div className="step-heading-row">
+                    <h3>{step.title}</h3>
+                    <span className={`step-state ${step.status}`}>{step.hint}</span>
+                  </div>
+                  <p>{step.description}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
 
         <form className="panel" onSubmit={handleSubmit}>
           <div className="panel-toolbar">
@@ -357,40 +393,6 @@ export default function Home() {
 
           {error ? <p className="error-box">{error}</p> : null}
         </form>
-      </section>
-
-      <section className="workflow-guide" aria-labelledby="workflow-title" aria-live="polite">
-        <div className="workflow-header">
-          <p className="eyebrow">System guide</p>
-          <h2 id="workflow-title">How the system works step by step</h2>
-          <p>
-            Follow this flow to process text or audio from input to final spoken output.
-          </p>
-          <p className="workflow-progress" role="status" aria-label={`Guide progress ${guideProgress} of ${guideSteps.length}`}>
-            Progress: {guideProgress}/{guideSteps.length} steps completed
-          </p>
-        </div>
-
-        <ol className="workflow-list">
-          {guideStepsWithStatus.map((step, index) => (
-            <li
-              key={step.title}
-              className={`workflow-step ${step.status}`}
-              aria-current={step.status === "active" ? "step" : undefined}
-            >
-              <span className="step-number" aria-hidden="true">
-                {step.status === "completed" ? "OK" : String(index + 1).padStart(2, "0")}
-              </span>
-              <div className="step-content">
-                <div className="step-heading-row">
-                  <h3>{step.title}</h3>
-                  <span className={`step-state ${step.status}`}>{step.hint}</span>
-                </div>
-                <p>{step.description}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
       </section>
 
       <section className="results-grid">
