@@ -525,6 +525,19 @@ h2 {
   max-width: 72ch;
 }
 
+.workflow-progress {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-top: 4px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  padding: 8px 12px;
+  border-radius: var(--radius-lg);
+  background: rgba(229, 124, 31, 0.12);
+  border: 1px solid rgba(229, 124, 31, 0.18);
+}
+
 .workflow-list {
   list-style: none;
   margin: 0;
@@ -544,12 +557,23 @@ h2 {
   border-radius: var(--radius-lg);
   background: linear-gradient(135deg, rgba(229, 124, 31, 0.08), rgba(229, 124, 31, 0.02));
   border: 1px solid rgba(229, 124, 31, 0.12);
-  transition: transform var(--duration-base) var(--ease-smooth), box-shadow var(--duration-base) var(--ease-smooth);
+  transition: transform var(--duration-base) var(--ease-smooth), box-shadow var(--duration-base) var(--ease-smooth), border-color var(--duration-base) var(--ease-smooth);
 }
 
 .workflow-step:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+}
+
+.workflow-step.completed {
+  border-color: rgba(86, 194, 139, 0.45);
+  background: linear-gradient(135deg, rgba(86, 194, 139, 0.14), rgba(86, 194, 139, 0.04));
+}
+
+.workflow-step.active {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, rgba(229, 124, 31, 0.2), rgba(229, 124, 31, 0.08));
+  box-shadow: 0 0 0 3px rgba(229, 124, 31, 0.14), var(--shadow-md);
 }
 
 .step-number {
@@ -565,16 +589,58 @@ h2 {
   box-shadow: 0 8px 18px rgba(229, 124, 31, 0.3);
 }
 
+.step-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
 .step-content h3 {
-  margin: 0 0 4px;
+  margin: 0;
   font-size: 1.04rem;
   color: var(--text-primary);
+}
+
+.step-state {
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 999px;
+  padding: 5px 9px;
+  border: 1px solid rgba(229, 124, 31, 0.2);
+  background: rgba(229, 124, 31, 0.08);
+  color: var(--primary-dark);
+  white-space: nowrap;
+}
+
+.step-state.completed {
+  border-color: rgba(86, 194, 139, 0.45);
+  background: rgba(86, 194, 139, 0.2);
+  color: #1f7c52;
+}
+
+.step-state.active {
+  border-color: rgba(229, 124, 31, 0.35);
+  background: rgba(229, 124, 31, 0.18);
+}
+
+.step-state.upcoming {
+  border-color: var(--border-primary);
+  background: rgba(229, 124, 31, 0.06);
 }
 
 .step-content p {
   margin: 0;
   color: var(--text-secondary);
   line-height: 1.65;
+}
+
+.workflow-step.active .step-content p {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .result-card {
@@ -758,8 +824,18 @@ h2 {
     font-size: 0.85rem;
   }
 
+  .step-heading-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
   .step-content h3 {
     font-size: 0.98rem;
+  }
+
+  .step-state {
+    font-size: 0.68rem;
   }
 
   .hero-card {

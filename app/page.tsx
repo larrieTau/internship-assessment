@@ -33,7 +33,7 @@ const guideSteps = [
     title: "Play final audio",
     description: "Listen to the generated speech and validate quality before sharing.",
   },
-];
+] as const;
 
 function resolveApiUrl(path: string) {
   // In production (Vercel), use relative paths to /api
@@ -216,6 +216,37 @@ export default function Home() {
   const audioMessage = extractAudioMessage(result);
   const isMockMode = Boolean(result && typeof result === "object" && (result as Record<string, unknown>).mock_mode);
 
+  const hasMode = mode === "text" || mode === "audio";
+  const hasLanguage = Boolean(targetLanguage.trim());
+  const hasContent = mode === "text" ? Boolean(text.trim()) : Boolean(audioFile);
+  const hasPipelineOutput = Boolean(
+    (typeof transcript === "string" && transcript.trim())
+      || (typeof summary === "string" && summary.trim())
+      || (typeof translation === "string" && translation.trim()),
+  );
+  const hasFinalAudio = Boolean(audioUrl);
+
+  const completionFlags = [hasMode, hasLanguage, hasContent, hasPipelineOutput, hasFinalAudio];
+  const activeStepIndex = completionFlags.findIndex((flag) => !flag);
+  const normalizedActiveIndex = activeStepIndex === -1 ? completionFlags.length - 1 : activeStepIndex;
+
+  const guideProgress = completionFlags.reduce((total, flag) => total + (flag ? 1 : 0), 0);
+
+  const guideStepsWithStatus = guideSteps.map((step, index) => {
+    const isCompleted = completionFlags[index];
+    const isActive = !isCompleted && index === normalizedActiveIndex;
+
+    return {
+      ...step,
+      status: isCompleted ? "completed" : isActive ? "active" : "upcoming",
+      hint: isCompleted
+        ? "Completed"
+        : isActive
+          ? "Current step"
+          : "Up next",
+    };
+  });
+
   return (
     <main className="page-shell">
       <section className="hero-card">
@@ -328,23 +359,33 @@ export default function Home() {
         </form>
       </section>
 
-      <section className="workflow-guide" aria-labelledby="workflow-title">
+      <section className="workflow-guide" aria-labelledby="workflow-title" aria-live="polite">
         <div className="workflow-header">
           <p className="eyebrow">System guide</p>
           <h2 id="workflow-title">How the system works step by step</h2>
           <p>
             Follow this flow to process text or audio from input to final spoken output.
           </p>
+          <p className="workflow-progress" role="status" aria-label={`Guide progress ${guideProgress} of ${guideSteps.length}`}>
+            Progress: {guideProgress}/{guideSteps.length} steps completed
+          </p>
         </div>
 
         <ol className="workflow-list">
-          {guideSteps.map((step, index) => (
-            <li key={step.title} className="workflow-step">
+          {guideStepsWithStatus.map((step, index) => (
+            <li
+              key={step.title}
+              className={`workflow-step ${step.status}`}
+              aria-current={step.status === "active" ? "step" : undefined}
+            >
               <span className="step-number" aria-hidden="true">
-                {String(index + 1).padStart(2, "0")}
+                {step.status === "completed" ? "OK" : String(index + 1).padStart(2, "0")}
               </span>
               <div className="step-content">
-                <h3>{step.title}</h3>
+                <div className="step-heading-row">
+                  <h3>{step.title}</h3>
+                  <span className={`step-state ${step.status}`}>{step.hint}</span>
+                </div>
                 <p>{step.description}</p>
               </div>
             </li>
