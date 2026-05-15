@@ -1,52 +1,177 @@
-# Sunbird AI Internship Assessment Exercise
+# Sunbird AI Internship Assessment
 
+## Project Description
 
-This assessment consists of 3 parts:
+This project is a Sunbird AI web application that accepts either typed text or an uploaded audio file, processes the input through transcription, summarisation, translation into a selected Ugandan language, and text-to-speech synthesis, and then displays every intermediate result in the UI.
 
-1. ✅ **Programming exercises** — implement `collatz()` and `distinct_numbers()` functions
-2. ✅ **Build a GenAI Application with Sunbird AI** — Next.js + Python backend web app
-3. 🚀 **Documentation & Deployment** — Deploy to Vercel
-
-## Quick Status
-
-| Part                                 | Status             | Notes                                      |
-| ------------------------------------ | ------------------ | ------------------------------------------ |
-| Part 1: Programming Exercises        | ✅ **Complete**    | All tests passing (5/5)                    |
-| Part 2: GenAI App (Next.js + Python) | ✅ **Complete**    | See [PROJECT_README.md](PROJECT_README.md) |
-| Part 3: Deployment                   | 📋 **In Progress** | See deployment steps below                 |
+The application features an interactive step-by-step guide that highlights the current workflow step based on user progress, providing a seamless and intuitive user experience.
 
 ---
 
-## Getting Started
+## Deployed Link
+
+**Live Application:** [https://internship-assessment-steel.vercel.app/](https://internship-assessment-steel.vercel.app/)
+
+---
+
+## Architecture Overview
+
+```
+Text input ────────────────────────────────────────────────────┐
+                                                                │
+Audio input → Speech-to-Text (audio only) → Summarise → Translate → Text-to-Speech → Output
+```
+
+The active web pipeline is implemented in the Next.js API routes:
+- **Text Processing:** `app/api/process-text/route.ts`
+- **Audio Processing:** `app/api/process-audio/route.ts`
+
+Both summarisation and translation use Sunbird AI's **Sunflower Simple Inference** endpoint (`/tasks/sunflower_simple`) with `model_type: "qwen"`.
+
+---
+
+## Local Setup
 
 ### Prerequisites
 
 - Node.js 18+ and npm
 - Python 3.9+
 - Git
+- Sunbird AI API Token
 
-### Initial Setup
+### Installation Steps
 
-1. **Fork & Clone**
+1. **Clone the Repository**
 
    ```bash
    git clone https://github.com/<your-username>/internship-assessment.git
    cd internship-assessment
    ```
 
-2. **Create & Activate Python Virtual Environment**
-   - Linux/Mac: `python -m venv venv && source venv/bin/activate`
-   - Windows: `python -m venv venv && venv\Scripts\activate.bat`
+2. **Create and Activate Python Virtual Environment**
+
+   ```bash
+   # macOS/Linux
+   python -m venv venv
+   source venv/bin/activate
+
+   # Windows
+   python -m venv venv
+   venv\Scripts\activate.bat
+   ```
 
 3. **Install Dependencies**
 
    ```bash
-   # Python packages
-   pip install -r requirements.txt
-
-   # Node.js packages (for Part 2)
    npm install
+   pip install -r requirements.txt
    ```
+
+4. **Configure Environment Variables**
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+   Add your Sunbird API token to `.env.local`:
+
+   ```
+   SUNBIRD_API_TOKEN=your_token_here
+   NEXT_PUBLIC_API_URL=http://localhost:5000
+   ```
+
+5. **Start the Application**
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## Environment Variables
+
+| Variable                | Required | Purpose                                                    |
+| ----------------------- | -------- | ---------------------------------------------------------- |
+| `SUNBIRD_API_TOKEN`     | Yes      | Authorises requests to Sunbird AI APIs                     |
+| `NEXT_PUBLIC_API_URL`   | No       | Optional frontend API base URL override (default: `/api`)  |
+
+See `.env.example` for the exact local development template.
+
+---
+
+## Usage
+
+1. **Choose Input Mode:** Select either "Text" or "Audio"
+2. **Paste or Upload:** Enter text content or upload an audio file
+3. **Select Target Language:** Choose from Luganda, Runyankole, Ateso, Lugbara, or Acholi
+4. **Process:** Click the "Process now" button
+5. **Review Results:** View the transcript, summary, translation, and generated audio output
+
+The **System Guide** on the left shows your progress through each step, automatically highlighting which stage of the workflow you're currently on.
+
+---
+
+## Screenshots
+
+### Hero Section & System Guide
+
+The application features a centered layout with the interactive system guide on the left and input controls on the right.
+
+![Hero Section and System Guide](screenshots/hero-and-guide.png)
+
+### Text Input State
+
+Users can enter text content and select their target language before processing.
+
+![Text Input State](screenshots/text-input-state.png)
+
+### Audio Upload State
+
+Support for audio file uploads with automatic transcription before summarisation and translation.
+
+![Audio Upload State](screenshots/audio-upload-state.png)
+
+### Output Results Panel
+
+The results panel displays transcript, summary, translation, and generated audio output below the input fields.
+
+![Output Results Panel](screenshots/output-results-panel.png)
+
+---
+
+## Known Limitations
+
+- **Audio file size:** Files longer than 5 minutes are rejected in the browser before upload
+- **Language support:** Only the five target languages shown in the UI are supported (Luganda, Runyankole, Ateso, Lugbara, Acholi)
+- **Deployment startup:** The deployed Vercel app may take a moment to wake up on the free tier, so the first request can be slower than later requests
+- **Audio quality:** Very noisy audio can reduce transcription quality, which then affects the summary, translation, and generated speech
+- **Backend requirement:** The application requires a running backend API server to process requests
+
+---
+
+## Verification Notes
+
+- **Part 1 exercises** are covered by `tests/test_basics.py`
+- **The Sunbird pipeline** uses the Sunflower endpoint for summarisation and translation in the Next.js API routes
+- **Interactive guide** automatically tracks progress through the 5-step workflow based on user interactions
+
+---
+
+## Technology Stack
+
+- **Frontend:** Next.js 13+, React, TypeScript, CSS3 (with CSS variables)
+- **Backend:** Python (Flask/FastAPI pattern in API routes), Node.js API routes
+- **APIs:** Sunbird AI Sunflower Simple Inference
+- **Deployment:** Vercel
+- **Styling:** Custom CSS with dark mode support
+
+---
+
+## Support & Issues
+
+For issues or questions, please refer to the project structure or contact the Sunbird AI team.
 
 4. **Get Your Sunbird AI API Token**
    - Go to [Sunbird AI Portal](https://app.sunbird.ai/)
