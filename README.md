@@ -127,6 +127,8 @@ Users can enter text content and select their target language before processing.
 
 ![Text Input State](public/text-input-state.png)
 
+
+
 ### Audio Upload State
 
 Support for audio file uploads with automatic transcription before summarisation and translation.
