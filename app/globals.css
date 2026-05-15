@@ -485,6 +485,98 @@ h2 {
   animation: fadeInUp 0.8s var(--ease-smooth) 0.2s both;
 }
 
+.workflow-guide {
+  background: var(--surface);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--border-secondary);
+  box-shadow: var(--shadow-lg);
+  padding: 40px;
+  display: grid;
+  gap: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.workflow-guide::before {
+  content: "";
+  position: absolute;
+  inset: -30% auto auto -10%;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(229, 124, 31, 0.12), transparent 68%);
+  pointer-events: none;
+}
+
+.workflow-header {
+  display: grid;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.workflow-header h2 {
+  margin: 0;
+}
+
+.workflow-header p {
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 72ch;
+}
+
+.workflow-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.workflow-step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: start;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(229, 124, 31, 0.08), rgba(229, 124, 31, 0.02));
+  border: 1px solid rgba(229, 124, 31, 0.12);
+  transition: transform var(--duration-base) var(--ease-smooth), box-shadow var(--duration-base) var(--ease-smooth);
+}
+
+.workflow-step:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.step-number {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--primary), #ff9b39);
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  box-shadow: 0 8px 18px rgba(229, 124, 31, 0.3);
+}
+
+.step-content h3 {
+  margin: 0 0 4px;
+  font-size: 1.04rem;
+  color: var(--text-primary);
+}
+
+.step-content p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
 .result-card {
   background: var(--surface);
   border-radius: var(--radius-xl);
@@ -617,6 +709,10 @@ h2 {
     gap: 24px;
   }
 
+  .workflow-guide {
+    padding: 30px;
+  }
+
   .result-card.wide {
     grid-column: span 1;
   }
@@ -645,6 +741,25 @@ h2 {
 @media (max-width: 600px) {
   main {
     padding: 28px 16px;
+  }
+
+  .workflow-guide {
+    padding: 24px 18px;
+  }
+
+  .workflow-step {
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .step-number {
+    width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+  }
+
+  .step-content h3 {
+    font-size: 0.98rem;
   }
 
   .hero-card {
