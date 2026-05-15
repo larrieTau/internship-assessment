@@ -796,6 +796,35 @@ h2 {
   font-weight: 500;
 }
 
+.timing-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.timing-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: rgba(229, 124, 31, 0.08);
+  border: 1px solid rgba(229, 124, 31, 0.12);
+}
+
+.timing-item dt {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.timing-item dd {
+  margin: 0;
+  color: var(--primary-dark);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
 .result-card:nth-child(1) {
   background: linear-gradient(180deg, var(--surface) 0%, rgba(229, 124, 31, 0.04) 100%);
 }

@@ -3,6 +3,7 @@ Pipeline orchestrator: handles the full AI processing pipeline.
 Input → STT → Summarize → Translate → TTS → Output
 """
 import os
+import time
 import tempfile
 from typing import Optional, Dict, Any
 from .sunbird_client import SunbirdClient
@@ -103,9 +104,12 @@ class ProcessingPipeline:
             "mock_mode": self.client.mock,
             "pipeline": {}
         }
+        timings: Dict[str, int] = {}
+        pipeline_started_at = time.perf_counter()
         
         try:
             # Step 1: Summarize (skip for short text < 100 chars)
+            summary_started_at = time.perf_counter()
             if len(text) > 100:
                 print(f"Summarizing text...")
                 summary_response = self.client.summarize(text)
@@ -115,17 +119,24 @@ class ProcessingPipeline:
                 print(f"Text is short, skipping summarization...")
                 summary = text
                 results["pipeline"]["summary"] = summary
+            timings["summary_ms"] = int((time.perf_counter() - summary_started_at) * 1000)
             
             # Step 2: Translate
+            translation_started_at = time.perf_counter()
             print(f"Translating to {target_language}...")
             translation_response = self.client.translate(summary, target_language)
             translated = self._extract_text_response(translation_response, summary)
             results["pipeline"]["translation"] = translated
+            timings["translation_ms"] = int((time.perf_counter() - translation_started_at) * 1000)
             
             # Step 3: Text-to-Speech
+            tts_started_at = time.perf_counter()
             print(f"Generating audio...")
             tts_response = self.client.text_to_speech(translated, target_language)
             results["pipeline"]["audio"] = tts_response
+            timings["tts_ms"] = int((time.perf_counter() - tts_started_at) * 1000)
+            timings["total_ms"] = int((time.perf_counter() - pipeline_started_at) * 1000)
+            results["pipeline"]["timings"] = timings
             
         except Exception as e:
             results["error"] = str(e)
@@ -158,30 +169,42 @@ class ProcessingPipeline:
             "mock_mode": self.client.mock,
             "pipeline": {}
         }
+        timings: Dict[str, int] = {}
+        pipeline_started_at = time.perf_counter()
         
         try:
             # Step 1: Transcribe
+            transcription_started_at = time.perf_counter()
             print(f"Transcribing audio...")
             transcription_response = self.client.transcribe(audio_file_path)
             transcript = self._extract_text_response(transcription_response, "")
             results["pipeline"]["transcript"] = transcript
+            timings["transcription_ms"] = int((time.perf_counter() - transcription_started_at) * 1000)
             
             # Step 2: Summarize
+            summary_started_at = time.perf_counter()
             print(f"Summarizing transcript...")
             summary_response = self.client.summarize(transcript)
             summary = self._extract_text_response(summary_response, transcript[:100])
             results["pipeline"]["summary"] = summary
+            timings["summary_ms"] = int((time.perf_counter() - summary_started_at) * 1000)
             
             # Step 3: Translate
+            translation_started_at = time.perf_counter()
             print(f"Translating to {target_language}...")
             translation_response = self.client.translate(summary, target_language)
             translated = self._extract_text_response(translation_response, summary)
             results["pipeline"]["translation"] = translated
+            timings["translation_ms"] = int((time.perf_counter() - translation_started_at) * 1000)
             
             # Step 4: Text-to-Speech
+            tts_started_at = time.perf_counter()
             print(f"Generating audio...")
             tts_response = self.client.text_to_speech(translated, target_language)
             results["pipeline"]["audio"] = tts_response
+            timings["tts_ms"] = int((time.perf_counter() - tts_started_at) * 1000)
+            timings["total_ms"] = int((time.perf_counter() - pipeline_started_at) * 1000)
+            results["pipeline"]["timings"] = timings
             
         except Exception as e:
             results["error"] = str(e)

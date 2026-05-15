@@ -107,7 +107,7 @@ See `.env.example` for the exact local development template.
 2. **Paste or Upload:** Enter text content or upload an audio file
 3. **Select Target Language:** Choose from Luganda, Runyankole, Ateso, Lugbara, or Acholi
 4. **Process:** Click the "Process now" button
-5. **Review Results:** View the transcript, summary, translation, and generated audio output
+5. **Review Results:** View the transcript, summary, timing metrics, translation, and generated audio output
 
 The **System Guide** on the left shows your progress through each step, automatically highlighting which stage of the workflow you're currently on.
 
@@ -119,7 +119,7 @@ The **System Guide** on the left shows your progress through each step, automati
 
 The application features a centered layout with the interactive system guide on the left and input controls on the right.
 
-![Hero Section and System Guide](screenshots/hero-and-guide.png)
+![Hero Section and System Guide](screenshots/hero-section.png)
 
 ### Text Input State
 
@@ -135,7 +135,7 @@ Support for audio file uploads with automatic transcription before summarisation
 
 ### Output Results Panel
 
-The results panel displays transcript, summary, translation, and generated audio output below the input fields.
+The results panel displays transcript, timing metrics, summary, translation, and generated audio output below the input fields.
 
 ![Output Results Panel](screenshots/output-results-panel.png)
 
