@@ -237,7 +237,7 @@ textarea {
 
 main {
   width: 100%;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 60px 32px;
 }
@@ -251,6 +251,15 @@ main {
 .hero-section {
   display: grid;
   animation: fadeInDown 0.8s var(--ease-smooth);
+  justify-items: center;
+  text-align: center;
+}
+
+.hero-copy {
+  max-width: 720px;
+  display: grid;
+  grid-gap: 24px;
+  gap: 24px;
 }
 
 .workflow-section {
@@ -260,6 +269,8 @@ main {
   gap: 40px;
   align-items: start;
   animation: fadeInUp 0.8s var(--ease-smooth) 0.15s both;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .workflow-content {
@@ -277,9 +288,7 @@ main {
   margin-bottom: 28px;
 }
 
-.hero-copy {
-  padding: 0;
-}
+
 
 .eyebrow {
   font-size: 0.7rem;
@@ -290,6 +299,7 @@ main {
   margin-bottom: 20px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
 }
 
@@ -347,6 +357,7 @@ h2 {
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 0;
+  justify-content: center;
 }
 
 .hero-badges span {
