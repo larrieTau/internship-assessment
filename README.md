@@ -119,25 +119,25 @@ The **System Guide** on the left shows your progress through each step, automati
 
 The application features a centered layout with the interactive system guide on the left and input controls on the right.
 
-![Hero Section and System Guide](screenshots/hero-section.png)
+![Hero Section and System Guide](public/hero-section.png)
 
 ### Text Input State
 
 Users can enter text content and select their target language before processing.
 
-![Text Input State](screenshots/text-input-state.png)
+![Text Input State](public/text-input-state.png)
 
 ### Audio Upload State
 
 Support for audio file uploads with automatic transcription before summarisation and translation.
 
-![Audio Upload State](screenshots/audio-upload-state.png)
+![Audio Upload State](public/audio-upload-state.png)
 
 ### Output Results Panel
 
 The results panel displays transcript, timing metrics, summary, translation, and generated audio output below the input fields.
 
-![Output Results Panel](screenshots/output-results-panel.png)
+![Output Results Panel](public/output-results-panel.png)
 
 ---
 
