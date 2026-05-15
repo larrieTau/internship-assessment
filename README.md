@@ -392,12 +392,12 @@ If you prefer a simpler UI framework, Hugging Face Spaces is excellent:
 
 ## Submission Checklist ✅
 
-- [ ] Part 1: All 5 tests passing
-- [ ] Part 2: Application code complete (Next.js + Python backend)
-- [ ] Part 3: Updated README with setup instructions
-- [ ] Part 3: Environment variables documented in `.env.example`
-- [ ] Part 3: Code deployed and live (Vercel or Hugging Face)
-- [ ] Part 3: Deployment link added to this README
+- [x] Part 1: All 5 tests passing
+- [x] Part 2: Application code complete (Next.js + Python backend)
+- [x] Part 3: Updated README with setup instructions
+- [x] Part 3: Environment variables documented in `.env.example`
+- [x] Part 3: Code deployed and live (Vercel or Hugging Face)
+- [x] Part 3: Deployment link added to this README
 
 ---
 
