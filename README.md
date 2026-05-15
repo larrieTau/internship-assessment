@@ -10,7 +10,7 @@ The application features an interactive step-by-step guide that highlights the c
 
 ## Deployed Link
 
-**Live Application:** [https://internship-assessment-steel.vercel.app/](https://internship-assessment-steel.vercel.app/)
+**Live Application:** [https://internship-assessmentsunbird.vercel.app/](https://internship-assessmentsunbird.vercel.app/)
 
 ---
 
